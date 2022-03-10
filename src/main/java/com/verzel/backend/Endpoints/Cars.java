@@ -5,6 +5,7 @@ import com.verzel.backend.Handlers.CarsHandler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +26,12 @@ public class Cars {
     @GetMapping
     public ResponseEntity view(@RequestParam String id) {
         Optional<CarsModel> result = handler.view(id);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity pagination() {
+        List<CarsModel> result = handler.pagination();
         return ResponseEntity.ok(result);
     }
 
