@@ -2,7 +2,6 @@ package com.verzel.backend.Handlers;
 
 import com.verzel.backend.Database.Models.CarsModel;
 import com.verzel.backend.Database.Repositories.CarsRepository;
-import com.verzel.backend.Libraries.Errors;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,6 +29,11 @@ public class CarsHandler {
     public Optional<CarsModel> view(String id) {
         Optional<CarsModel> result = carsRepository.findById(id);
 
+        return result;
+    }
+
+    public List<CarsModel> pagination() {
+        List<CarsModel> result = carsRepository.findAll();
         return result;
     }
 
