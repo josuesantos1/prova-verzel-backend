@@ -39,6 +39,17 @@ public class CarsHandler {
         return result;
     }
 
+    public Optional<List<CarsModel>> viewMe(String owner) {
+        Optional<List<CarsModel>> result = carsRepository.findAllByOwner(owner);
+
+        for (CarsModel car: result.get()) {
+            String url = storage.getPresignedUrl(car.getPhoto()).toString();
+            car.setPhoto(url);
+        }
+
+        return result;
+    }
+
     public Optional<CarsModel> view(String id) {
         Optional<CarsModel> result = carsRepository.findById(id);
 
