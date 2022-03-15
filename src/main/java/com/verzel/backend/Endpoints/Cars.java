@@ -23,7 +23,21 @@ public class Cars {
 
     @PostMapping()
     public ResponseEntity create(@RequestBody CarsModel car) {
+        Object email = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        car.setOwner((String) email);
+
         CarsModel result = handler.create(car);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity viewMe() {
+        Object email = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        Optional<List<CarsModel>> result = handler.viewMe((String) email);
         return ResponseEntity.ok(result);
     }
 
