@@ -47,8 +47,8 @@ public class Cars {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/pagination")
-    public ResponseEntity pagination() {
+    @GetMapping("/all")
+    public ResponseEntity list() {
         List<CarsModel> result = handler.listview();
         return ResponseEntity.ok(result);
     }
