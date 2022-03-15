@@ -2,8 +2,10 @@ package com.verzel.backend.Handlers;
 
 import com.verzel.backend.Database.Models.CarsModel;
 import com.verzel.backend.Database.Repositories.CarsRepository;
+import com.verzel.backend.Libraries.Cloud.Storage;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,34 +14,46 @@ import java.util.UUID;
 public class CarsHandler {
 
     public final CarsRepository carsRepository;
+    private final Storage storage;
 
-    public CarsHandler(CarsRepository carsRepository) {
+    public CarsHandler(CarsRepository carsRepository, Storage storage) {
         this.carsRepository = carsRepository;
+        this.storage = storage;
     }
 
     public CarsModel create(CarsModel car) {
-        UUID uuid = UUID.randomUUID();
-        String[] id = uuid.toString().split("-");
+        String uuid = UUID.randomUUID().toString();
+        String[] id = uuid.split("-");
         car.setId(id[0]);
 
+        CarsModel carsModel = new CarsModel();
+
+        String filename = UUID.randomUUID() + car.getPhoto();
+
+        URL url = storage.putPresignedUrl(filename);
+        car.setPhoto(filename);
         CarsModel result = carsRepository.save(car);
+
+        result.setPhoto(url.toString());
+
         return result;
     }
 
     public Optional<CarsModel> view(String id) {
         Optional<CarsModel> result = carsRepository.findById(id);
 
+        String url = storage.getPresignedUrl(result.get().getPhoto()).toString();
+        result.orElseThrow().setPhoto(url);
+
         return result;
     }
 
-    public List<CarsModel> pagination() {
-        List<CarsModel> result = carsRepository.findAll();
-        return result;
+    public List<CarsModel> listview() {
+        return carsRepository.findAll();
     }
 
     public CarsModel update(CarsModel car) {
-        CarsModel result = carsRepository.save(car);
-        return result;
+        return carsRepository.save(car);
     }
 
     public void delete(String id) {
