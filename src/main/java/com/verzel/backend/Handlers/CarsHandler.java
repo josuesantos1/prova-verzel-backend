@@ -60,7 +60,14 @@ public class CarsHandler {
     }
 
     public List<CarsModel> listview() {
-        return carsRepository.findAll();
+        List<CarsModel> result = carsRepository.findAll();
+
+        for (CarsModel car: result) {
+            String url = storage.getPresignedUrl(car.getPhoto()).toString();
+            car.setPhoto(url);
+        }
+
+        return result;
     }
 
     public CarsModel update(CarsModel car) {
