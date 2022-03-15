@@ -1,12 +1,16 @@
 package com.verzel.backend.Endpoints;
 
 import com.verzel.backend.Database.Models.CarsModel;
+import com.verzel.backend.Database.Repositories.CarsRepository;
 import com.verzel.backend.Handlers.CarsHandler;
+import com.verzel.backend.Libraries.Cloud.Storage;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/cars")
@@ -31,7 +35,7 @@ public class Cars {
 
     @GetMapping("/pagination")
     public ResponseEntity pagination() {
-        List<CarsModel> result = handler.pagination();
+        List<CarsModel> result = handler.listview();
         return ResponseEntity.ok(result);
     }
 
